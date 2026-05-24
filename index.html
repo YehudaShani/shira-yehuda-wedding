@@ -376,7 +376,15 @@
       border-color: var(--terra) !important;
       background: var(--terra) !important;
     }
-    .radio-label { font-size: 0.95rem; color: var(--text); font-weight: 400; }
+    .radio-label {
+      font-size: 1rem;
+      color: var(--text);
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+    }
 
     /* Custom checkboxes */
     .checkbox-group { display: flex; gap: 0.8rem; flex-wrap: wrap; }
@@ -586,7 +594,7 @@
           <div class="d-icon">💒</div>
           <div class="d-label">Ceremony</div>
           <div class="d-val">19:00</div>
-          <div class="d-sub">Chuppah & Kiddushin</div>
+          <div class="d-sub">Chupa & Kiddushin</div>
         </div>
         <div class="detail-card">
           <div class="d-icon">🌿</div>
@@ -647,17 +655,17 @@
               <label class="radio-option" data-value="yes">
                 <input type="radio" name="attending" value="Yes,  I'll be there" required>
                 <span class="radio-dot"></span>
-                <span class="radio-label">🎉 Yes, I'll be there!</span>
+                <span class="radio-label">Yes, I'll be there!</span>
               </label>
               <label class="radio-option" data-value="no">
                 <input type="radio" name="attending" value="Sorry, can't make it">
                 <span class="radio-dot"></span>
-                <span class="radio-label">😢 Sorry, can't make it</span>
+                <span class="radio-label">Sorry, can't make it</span>
               </label>
               <label class="radio-option" data-value="maybe">
                 <input type="radio" name="attending" value="I can't confirm yet, but will as soon as I can!">
                 <span class="radio-dot"></span>
-                <span class="radio-label">🤔 Can't confirm yet — I'll let you know soon</span>
+                <span class="radio-label">Can't confirm yet — I'll let you know soon</span>
               </label>
             </div>
           </div>
