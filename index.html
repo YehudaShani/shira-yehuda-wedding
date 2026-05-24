@@ -630,14 +630,14 @@
         <form
           class="rsvp-form"
           id="rsvp-form"
-          action="https://docs.google.com/forms/d/e/1FAIpQLScvI2c5svFTdzWQtS4qATwQKOMW-NQeJi1lUzk3Q0UnXW8bOA/formResponse"
+          action="https://script.google.com/macros/s/AKfycbzxFdyfKE2Gb04DQyOtOkJug_59ZxHUkj1vi9uCTofL1kPGwx2RQNK5VKCzkZWGQGay/exec"
           method="POST"
         >
 
           <!-- Name -->
           <div class="form-group">
             <label for="rsvp-name">Your name <span class="req">*</span></label>
-            <input type="text" id="rsvp-name" name="entry.1382902231" placeholder="First & last name" required>
+            <input type="text" id="rsvp-name" name="name" placeholder="First & last name" required>
           </div>
 
           <!-- Attendance -->
@@ -645,17 +645,17 @@
             <label>Can you attend? <span class="req">*</span></label>
             <div class="radio-group" id="attendance-group">
               <label class="radio-option" data-value="yes">
-                <input type="radio" name="entry.877086558" value="Yes,  I'll be there" required>
+                <input type="radio" name="attending" value="Yes,  I'll be there" required>
                 <span class="radio-dot"></span>
                 <span class="radio-label">🎉 Yes, I'll be there!</span>
               </label>
               <label class="radio-option" data-value="no">
-                <input type="radio" name="entry.877086558" value="Sorry, can't make it">
+                <input type="radio" name="attending" value="Sorry, can't make it">
                 <span class="radio-dot"></span>
                 <span class="radio-label">😢 Sorry, can't make it</span>
               </label>
               <label class="radio-option" data-value="maybe">
-                <input type="radio" name="entry.877086558" value="I can't confirm yet, but will as soon as I can!">
+                <input type="radio" name="attending" value="I can't confirm yet, but will as soon as I can!">
                 <span class="radio-dot"></span>
                 <span class="radio-label">🤔 Can't confirm yet — I'll let you know soon</span>
               </label>
@@ -668,7 +668,7 @@
             <!-- Additional guests -->
             <div class="form-group">
               <label for="rsvp-guests">Who else is coming with you?</label>
-              <input type="text" id="rsvp-guests" name="entry.1498135098" placeholder="Names of any guests you're bringing">
+              <input type="text" id="rsvp-guests" name="guests" placeholder="Names of any guests you're bringing">
             </div>
 
             <!-- Shuttle -->
@@ -676,12 +676,12 @@
               <label>Would you need a shuttle? <span style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--muted); font-size:0.8rem;">(we're still figuring this out — just let us know if there's interest)</span></label>
               <div class="checkbox-group">
                 <label class="check-option" data-name="shuttle_haifa">
-                  <input type="checkbox" name="entry.417958002" value="Haifa">
+                  <input type="checkbox" name="shuttle" value="Haifa">
                   <span class="check-box">✓</span>
                   <span class="radio-label">🚌 From Haifa</span>
                 </label>
                 <label class="check-option" data-name="shuttle_jerusalem">
-                  <input type="checkbox" name="entry.417958002" value="Jerusalem">
+                  <input type="checkbox" name="shuttle" value="Jerusalem">
                   <span class="check-box">✓</span>
                   <span class="radio-label">🚌 From Jerusalem</span>
                 </label>
@@ -693,7 +693,7 @@
           <!-- Dietary (always shown) -->
           <div class="form-group">
             <label for="rsvp-dietary">Dietary restrictions or anything we should know?</label>
-            <textarea id="rsvp-dietary" name="entry.1460112408" placeholder="Vegetarian, vegan, allergies… or just a note for us 🌾"></textarea>
+            <textarea id="rsvp-dietary" name="dietary" placeholder="Vegetarian, vegan, allergies… or just a note for us 🌾"></textarea>
           </div>
 
           <!-- Submit -->
@@ -807,9 +807,17 @@
       // Submit via fetch (stays on page)
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const data = new FormData(form);
+        // Collect form data, joining multiple shuttle checkboxes into one value
+        const raw = new FormData(form);
+        const data = new URLSearchParams();
+        const shuttleVals = [];
+        for (const [k, v] of raw.entries()) {
+          if (k === 'shuttle') { shuttleVals.push(v); }
+          else { data.append(k, v); }
+        }
+        if (shuttleVals.length) data.append('shuttle', shuttleVals.join(', '));
         try {
-          await fetch(form.action, { method: 'POST', body: data, mode: 'no-cors' });
+          await fetch(form.action, { method: 'POST', body: data });
         } catch (_) { /* show success even on network hiccup */ }
         showSuccess();
       });
