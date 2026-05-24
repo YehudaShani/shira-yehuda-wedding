@@ -282,7 +282,7 @@
       margin-top: 0.25rem;
     }
 
-    .detail-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .detail-links { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; justify-content: center; }
 
     /* ── RSVP ── */
     #rsvp {
@@ -293,12 +293,145 @@
       overflow: hidden;
       box-shadow: 0 6px 30px rgba(58,46,38,0.1);
       border: 1px solid var(--cream-dark);
+      background: white;
+      padding: 2.5rem 2rem;
     }
-    .rsvp-wrap iframe {
+
+    /* Form layout */
+    .rsvp-form { display: flex; flex-direction: column; gap: 1.6rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--sage-dark);
+    }
+    .form-group label .req { color: var(--terra); margin-left: 2px; }
+
+    .form-group input[type="text"],
+    .form-group textarea {
       width: 100%;
-      min-height: 700px;
-      border: none;
-      display: block;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 0.5rem;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--cream);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .form-group input[type="text"]:focus,
+    .form-group textarea:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(122,158,126,0.15);
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    /* Custom radio group */
+    .radio-group { display: flex; flex-direction: column; gap: 0.6rem; }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 0.55rem;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+      background: var(--cream);
+    }
+    .radio-option:hover { border-color: var(--sage); background: #f0f7f1; }
+    .radio-option input[type="radio"] { display: none; }
+    .radio-dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--cream-dark);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .radio-dot::after {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: white;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .radio-option.selected { border-color: var(--sage); background: #f0f7f1; }
+    .radio-option.selected .radio-dot {
+      border-color: var(--sage-dark);
+      background: var(--sage-dark);
+    }
+    .radio-option.selected .radio-dot::after { opacity: 1; }
+    .radio-option.selected-no { border-color: var(--terra) !important; background: #fdf3f0 !important; }
+    .radio-option.selected-no .radio-dot {
+      border-color: var(--terra) !important;
+      background: var(--terra) !important;
+    }
+    .radio-label { font-size: 0.95rem; color: var(--text); font-weight: 400; }
+
+    /* Custom checkboxes */
+    .checkbox-group { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .check-option {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.65rem 1.1rem;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 0.55rem;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      background: var(--cream);
+      user-select: none;
+    }
+    .check-option:hover { border-color: var(--sage); background: #f0f7f1; }
+    .check-option input[type="checkbox"] { display: none; }
+    .check-box {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      border: 2px solid var(--cream-dark);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      transition: all 0.15s;
+      color: white;
+    }
+    .check-option.checked { border-color: var(--sage-dark); background: #f0f7f1; }
+    .check-option.checked .check-box { background: var(--sage-dark); border-color: var(--sage-dark); }
+
+    /* Collapsible extra fields */
+    .rsvp-conditional { display: flex; flex-direction: column; gap: 1.6rem; }
+    .rsvp-conditional.hidden { display: none; }
+
+    /* Submit row */
+    .form-submit { margin-top: 0.5rem; }
+    .form-submit .btn { width: 100%; text-align: center; font-size: 0.9rem; padding: 1rem; }
+
+    /* Success state */
+    .rsvp-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 3rem 1rem;
+      gap: 1rem;
+    }
+    .rsvp-success .success-icon { font-size: 3rem; }
+    .rsvp-success h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      color: var(--brown);
+    }
+    .rsvp-success p { color: var(--muted); font-size: 0.95rem; line-height: 1.7; }
+    .rsvp-success.visible { display: flex; }
+
+    @media (max-width: 580px) {
+      .rsvp-wrap { padding: 1.5rem 1.2rem; }
     }
 
     /* ── Registry ── */
@@ -411,7 +544,7 @@
 
       <!-- Invitation image — save your invite as "invite.jpg" in this folder -->
       <div class="hero-invite-wrap">
-        <img src="invite.jpg" alt="Shira & Yehuda Wedding Invitation"
+        <img src="invite.png" alt="Shira & Yehuda Wedding Invitation"
              onerror="this.parentElement.innerHTML='<div class=\'invite-placeholder\'><div class=\'placeholder-icon\'>🌿</div><p>Save your invitation image as<br><strong>invite.jpg</strong><br>in the Wedding Site folder</p></div>'" />
       </div>
 
@@ -462,13 +595,13 @@
           <div class="d-icon">🚌</div>
           <div class="d-label">Shuttle</div>
           <div class="d-val">Haifa & Jerusalem</div>
-          <div class="d-sub">RSVP to reserve a seat</div>
+          <div class="d-sub">TBD — let us know if you'd need one</div>
         </div>
       </div>
 
       <div class="detail-links">
-        <a href="https://shorturl.at/W5m4A" target="_blank" rel="noopener" class="btn btn-terra">📍 Venue Directions</a>
-        <a href="https://chat.whatsapp.com/JSzh8NW2WeYEU41byprHVs?s=cl&p=a&mlu=4" target="_blank" rel="noopener" class="btn btn-sage">🚗 Ride-Share Group</a>
+        <a href="https://shorturl.at/W5m4A" target="_blank" rel="noopener" class="btn btn-terra">📍 Directions</a>
+        <a href="https://chat.whatsapp.com/JSzh8NW2WeYEU41byprHVs?s=cl&p=a&mlu=4" target="_blank" rel="noopener" class="btn btn-sage">🚗 Ride-Share</a>
       </div>
     </div>
   </section>
@@ -482,12 +615,95 @@
         We can't wait to celebrate with you. Please fill out the form below so we know you're coming — it only takes a minute. 🌾
       </p>
       <div class="rsvp-wrap">
-        <iframe
-          src="https://docs.google.com/forms/d/e/1FAIpQLScvI2c5svFTdzWQtS4qATwQKOMW-NQeJi1lUzk3Q0UnXW8bOA/viewform?embedded=true"
-          title="Wedding RSVP Form"
-          loading="lazy">
-          Loading…
-        </iframe>
+
+        <!-- Success message (shown after submit) -->
+        <div class="rsvp-success" id="rsvp-success">
+          <div class="success-icon">🌿</div>
+          <h3>You're on the list!</h3>
+          <p>Thanks for letting us know — we can't wait to celebrate with you.<br>See you on 30 June 2026! 🥂</p>
+        </div>
+
+        <!-- RSVP Form -->
+        <form
+          class="rsvp-form"
+          id="rsvp-form"
+          action="https://formsubmit.co/yehudashani88@gmail.com"
+          method="POST"
+        >
+          <!-- FormSubmit config -->
+          <input type="hidden" name="_subject" value="💌 New RSVP — Shira & Yehuda's Wedding">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" value=""><!-- filled by JS to stay on page -->
+
+          <!-- Name -->
+          <div class="form-group">
+            <label for="rsvp-name">Your name <span class="req">*</span></label>
+            <input type="text" id="rsvp-name" name="name" placeholder="First & last name" required>
+          </div>
+
+          <!-- Attendance -->
+          <div class="form-group">
+            <label>Can you attend? <span class="req">*</span></label>
+            <div class="radio-group" id="attendance-group">
+              <label class="radio-option" data-value="yes">
+                <input type="radio" name="attending" value="Yes, I'll be there!" required>
+                <span class="radio-dot"></span>
+                <span class="radio-label">🎉 Yes, I'll be there!</span>
+              </label>
+              <label class="radio-option" data-value="no">
+                <input type="radio" name="attending" value="Sorry, can't make it">
+                <span class="radio-dot"></span>
+                <span class="radio-label">😢 Sorry, can't make it</span>
+              </label>
+              <label class="radio-option" data-value="maybe">
+                <input type="radio" name="attending" value="Can't confirm yet">
+                <span class="radio-dot"></span>
+                <span class="radio-label">🤔 Can't confirm yet — I'll let you know soon</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Conditional fields (hidden until "yes" or "maybe") -->
+          <div class="rsvp-conditional hidden" id="rsvp-conditional">
+
+            <!-- Additional guests -->
+            <div class="form-group">
+              <label for="rsvp-guests">Who else is coming with you?</label>
+              <input type="text" id="rsvp-guests" name="additional_guests" placeholder="Names of any guests you're bringing">
+            </div>
+
+            <!-- Shuttle -->
+            <div class="form-group">
+              <label>Would you need a shuttle? <span style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--muted); font-size:0.8rem;">(We're still figuring this out — just let us know if there's interest)</span></label>
+              <div class="checkbox-group">
+                <label class="check-option" data-name="shuttle_haifa">
+                  <input type="checkbox" name="shuttle" value="Haifa">
+                  <span class="check-box">✓</span>
+                  <span class="radio-label">🚌 From Haifa</span>
+                </label>
+                <label class="check-option" data-name="shuttle_jerusalem">
+                  <input type="checkbox" name="shuttle" value="Jerusalem">
+                  <span class="check-box">✓</span>
+                  <span class="radio-label">🚌 From Jerusalem</span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Dietary (always shown) -->
+          <div class="form-group">
+            <label for="rsvp-dietary">Dietary restrictions or anything we should know?</label>
+            <textarea id="rsvp-dietary" name="dietary_restrictions" placeholder="Vegetarian, vegan, allergies… or just a note for us 🌾"></textarea>
+          </div>
+
+          <!-- Submit -->
+          <div class="form-submit">
+            <button type="submit" class="btn btn-terra">Send RSVP 🌿</button>
+          </div>
+
+        </form>
       </div>
     </div>
   </section>
@@ -510,12 +726,8 @@
           <p>Quick and easy — send a gift directly from your phone with Bit.</p>
           <div class="bit-list">
             <a href="https://bit.ly/dummy-shira" target="_blank" rel="noopener" class="bit-person">
-              <span class="bit-avatar av-shira">S</span>
-              Send to Shira
-            </a>
-            <a href="https://bit.ly/dummy-yehuda" target="_blank" rel="noopener" class="bit-person">
-              <span class="bit-avatar av-yehuda">Y</span>
-              Send to Yehuda
+              <span class="bit-avatar av-shira" style="background: linear-gradient(135deg, var(--terra), var(--sage-dark));">S&Y</span>
+              Send to Shira & Yehuda
             </a>
           </div>
         </div>
@@ -546,6 +758,57 @@
     </p>
     <p style="margin-top:1rem; font-size:0.8rem; opacity:0.5;">Made with love 🌿</p>
   </footer>
+
+  <!-- RSVP FORM LOGIC -->
+  <script>
+    (function () {
+      const form        = document.getElementById('rsvp-form');
+      const success     = document.getElementById('rsvp-success');
+      const conditional = document.getElementById('rsvp-conditional');
+      const radios      = document.querySelectorAll('#attendance-group .radio-option');
+
+      // Keep the page after FormSubmit redirect (use current URL as _next)
+      form.querySelector('input[name="_next"]').value = location.href + '#rsvp';
+
+      // Style custom radio buttons & show/hide conditional fields
+      radios.forEach(opt => {
+        opt.addEventListener('click', () => {
+          radios.forEach(o => o.classList.remove('selected', 'selected-no'));
+          const val = opt.dataset.value;
+          opt.classList.add(val === 'no' ? 'selected-no' : 'selected');
+          opt.querySelector('input').checked = true;
+          conditional.classList.toggle('hidden', val === 'no');
+        });
+      });
+
+      // Style custom checkboxes
+      document.querySelectorAll('.check-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          const cb = opt.querySelector('input[type="checkbox"]');
+          cb.checked = !cb.checked;
+          opt.classList.toggle('checked', cb.checked);
+        });
+      });
+
+      // Show success message if redirected back with #rsvp after submit
+      if (location.search.includes('formsubmit') || document.referrer.includes('formsubmit')) {
+        form.style.display = 'none';
+        success.classList.add('visible');
+      }
+
+      // Optimistic in-page success (JS submit via fetch so we stay on page)
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        try {
+          await fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
+        } catch (_) { /* network hiccup — still show success */ }
+        form.style.display = 'none';
+        success.classList.add('visible');
+        success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    })();
+  </script>
 
   <!-- COUNTDOWN -->
   <script>
