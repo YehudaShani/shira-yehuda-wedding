@@ -621,28 +621,23 @@
 
         <!-- Success message (shown after submit) -->
         <div class="rsvp-success" id="rsvp-success">
-          <div class="success-icon">🌿</div>
-          <h3>You're on the list!</h3>
-          <p>Thanks for letting us know — we can't wait to celebrate with you.<br>See you on 30 June 2026! 🥂</p>
+          <div class="success-icon" id="success-icon">🌿</div>
+          <h3 id="success-title">Got it!</h3>
+          <p id="success-body">Thanks for letting us know.</p>
         </div>
 
         <!-- RSVP Form -->
         <form
           class="rsvp-form"
           id="rsvp-form"
-          action="https://formsubmit.co/yehudashani88@gmail.com"
+          action="https://docs.google.com/forms/d/e/1FAIpQLScvI2c5svFTdzWQtS4qATwQKOMW-NQeJi1lUzk3Q0UnXW8bOA/formResponse"
           method="POST"
         >
-          <!-- FormSubmit config -->
-          <input type="hidden" name="_subject" value="💌 New RSVP — Shira & Yehuda's Wedding">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value=""><!-- filled by JS to stay on page -->
 
           <!-- Name -->
           <div class="form-group">
             <label for="rsvp-name">Your name <span class="req">*</span></label>
-            <input type="text" id="rsvp-name" name="name" placeholder="First & last name" required>
+            <input type="text" id="rsvp-name" name="entry.1382902231" placeholder="First & last name" required>
           </div>
 
           <!-- Attendance -->
@@ -650,17 +645,17 @@
             <label>Can you attend? <span class="req">*</span></label>
             <div class="radio-group" id="attendance-group">
               <label class="radio-option" data-value="yes">
-                <input type="radio" name="attending" value="Yes, I'll be there!" required>
+                <input type="radio" name="entry.877086558" value="Yes,  I'll be there" required>
                 <span class="radio-dot"></span>
                 <span class="radio-label">🎉 Yes, I'll be there!</span>
               </label>
               <label class="radio-option" data-value="no">
-                <input type="radio" name="attending" value="Sorry, can't make it">
+                <input type="radio" name="entry.877086558" value="Sorry, can't make it">
                 <span class="radio-dot"></span>
                 <span class="radio-label">😢 Sorry, can't make it</span>
               </label>
               <label class="radio-option" data-value="maybe">
-                <input type="radio" name="attending" value="Can't confirm yet">
+                <input type="radio" name="entry.877086558" value="I can't confirm yet, but will as soon as I can!">
                 <span class="radio-dot"></span>
                 <span class="radio-label">🤔 Can't confirm yet — I'll let you know soon</span>
               </label>
@@ -673,7 +668,7 @@
             <!-- Additional guests -->
             <div class="form-group">
               <label for="rsvp-guests">Who else is coming with you?</label>
-              <input type="text" id="rsvp-guests" name="additional_guests" placeholder="Names of any guests you're bringing">
+              <input type="text" id="rsvp-guests" name="entry.1498135098" placeholder="Names of any guests you're bringing">
             </div>
 
           </div>
@@ -683,12 +678,12 @@
             <label>Would you need a shuttle? <span style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--muted); font-size:0.8rem;">(We're still figuring this out — just let us know if there's interest)</span></label>
             <div class="checkbox-group">
               <label class="check-option" data-name="shuttle_haifa">
-                <input type="checkbox" name="shuttle" value="Haifa">
+                <input type="checkbox" name="entry.417958002" value="Haifa">
                 <span class="check-box">✓</span>
                 <span class="radio-label">🚌 From Haifa</span>
               </label>
               <label class="check-option" data-name="shuttle_jerusalem">
-                <input type="checkbox" name="shuttle" value="Jerusalem">
+                <input type="checkbox" name="entry.417958002" value="Jerusalem">
                 <span class="check-box">✓</span>
                 <span class="radio-label">🚌 From Jerusalem</span>
               </label>
@@ -698,7 +693,7 @@
           <!-- Dietary (always shown) -->
           <div class="form-group">
             <label for="rsvp-dietary">Dietary restrictions or anything we should know?</label>
-            <textarea id="rsvp-dietary" name="dietary_restrictions" placeholder="Vegetarian, vegan, allergies… or just a note for us 🌾"></textarea>
+            <textarea id="rsvp-dietary" name="entry.1460112408" placeholder="Vegetarian, vegan, allergies… or just a note for us 🌾"></textarea>
           </div>
 
           <!-- Submit -->
@@ -770,14 +765,14 @@
       const conditional = document.getElementById('rsvp-conditional');
       const radios      = document.querySelectorAll('#attendance-group .radio-option');
 
-      // Keep the page after FormSubmit redirect (use current URL as _next)
-      form.querySelector('input[name="_next"]').value = location.href + '#rsvp';
+      let selectedAttendance = 'yes';
 
       // Style custom radio buttons & show/hide conditional fields
       radios.forEach(opt => {
         opt.addEventListener('click', () => {
           radios.forEach(o => o.classList.remove('selected', 'selected-no'));
           const val = opt.dataset.value;
+          selectedAttendance = val;
           opt.classList.add(val === 'no' ? 'selected-no' : 'selected');
           opt.querySelector('input').checked = true;
           conditional.classList.toggle('hidden', val === 'no');
@@ -793,22 +788,30 @@
         });
       });
 
-      // Show success message if redirected back with #rsvp after submit
-      if (location.search.includes('formsubmit') || document.referrer.includes('formsubmit')) {
+      // Dynamic success messages based on attendance
+      function showSuccess() {
+        const messages = {
+          yes:   { icon: '🌿', title: "You're on the list!", body: "We can't wait to celebrate with you.<br>See you on 30 June 2026! 🥂" },
+          no:    { icon: '💛', title: "Thanks for letting us know",  body: "We'll miss you — but we really appreciate you taking the time to RSVP." },
+          maybe: { icon: '🤍', title: "Got it!",                     body: "No worries — just let us know when you can. We hope to see you there!" },
+        };
+        const m = messages[selectedAttendance] || messages.yes;
+        document.getElementById('success-icon').textContent  = m.icon;
+        document.getElementById('success-title').textContent = m.title;
+        document.getElementById('success-body').innerHTML    = m.body;
         form.style.display = 'none';
         success.classList.add('visible');
+        success.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
 
-      // Optimistic in-page success (JS submit via fetch so we stay on page)
+      // Submit via fetch (stays on page)
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const data = new FormData(form);
         try {
-          await fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
-        } catch (_) { /* network hiccup — still show success */ }
-        form.style.display = 'none';
-        success.classList.add('visible');
-        success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          await fetch(form.action, { method: 'POST', body: data, mode: 'no-cors' });
+        } catch (_) { /* show success even on network hiccup */ }
+        showSuccess();
       });
     })();
   </script>
