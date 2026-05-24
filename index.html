@@ -250,9 +250,12 @@
 
     .details-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 1.2rem;
       margin-bottom: 2.5rem;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .detail-card {
       background: var(--cream);
@@ -673,23 +676,23 @@
               <input type="text" id="rsvp-guests" name="additional_guests" placeholder="Names of any guests you're bringing">
             </div>
 
-            <!-- Shuttle -->
-            <div class="form-group">
-              <label>Would you need a shuttle? <span style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--muted); font-size:0.8rem;">(We're still figuring this out — just let us know if there's interest)</span></label>
-              <div class="checkbox-group">
-                <label class="check-option" data-name="shuttle_haifa">
-                  <input type="checkbox" name="shuttle" value="Haifa">
-                  <span class="check-box">✓</span>
-                  <span class="radio-label">🚌 From Haifa</span>
-                </label>
-                <label class="check-option" data-name="shuttle_jerusalem">
-                  <input type="checkbox" name="shuttle" value="Jerusalem">
-                  <span class="check-box">✓</span>
-                  <span class="radio-label">🚌 From Jerusalem</span>
-                </label>
-              </div>
-            </div>
+          </div>
 
+          <!-- Shuttle (always visible) -->
+          <div class="form-group">
+            <label>Would you need a shuttle? <span style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--muted); font-size:0.8rem;">(We're still figuring this out — just let us know if there's interest)</span></label>
+            <div class="checkbox-group">
+              <label class="check-option" data-name="shuttle_haifa">
+                <input type="checkbox" name="shuttle" value="Haifa">
+                <span class="check-box">✓</span>
+                <span class="radio-label">🚌 From Haifa</span>
+              </label>
+              <label class="check-option" data-name="shuttle_jerusalem">
+                <input type="checkbox" name="shuttle" value="Jerusalem">
+                <span class="check-box">✓</span>
+                <span class="radio-label">🚌 From Jerusalem</span>
+              </label>
+            </div>
           </div>
 
           <!-- Dietary (always shown) -->
