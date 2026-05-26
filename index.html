@@ -1150,6 +1150,15 @@
       // Submit via fetch (stays on page)
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        // Prevent double-submit
+        const submitBtn = form.querySelector('[type="submit"]');
+        if (submitBtn.disabled) return;
+        submitBtn.disabled = true;
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = '⏳';
+        submitBtn.style.opacity = '0.7';
+
         const raw = new FormData(form);
         const data = new URLSearchParams();
 
