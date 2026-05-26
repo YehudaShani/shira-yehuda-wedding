@@ -605,8 +605,8 @@
 
       <!-- Invitation image -->
       <div class="hero-invite-wrap">
-        <img id="invite-img" src="invite.png" alt="Shira & Yehuda Wedding Invitation"
-             onerror="this.parentElement.innerHTML='<div class=\'invite-placeholder\'><div class=\'placeholder-icon\'>🌿</div><p>Save your invitation image as<br><strong>invite.png</strong><br>in the Wedding Site folder</p></div>'" />
+        <img id="invite-img" src="invite.jpg" alt="Shira & Yehuda Wedding Invitation"
+             onerror="this.parentElement.innerHTML='<div class=\'invite-placeholder\'><div class=\'placeholder-icon\'>🌿</div><p>Invitation image not found</p></div>'" />
       </div>
 
       <div class="hero-names">Shira <span class="amp">&</span> Yehuda</div>
@@ -991,7 +991,7 @@
 
       // Swap invite image
       const img = document.getElementById('invite-img');
-      if (img) img.src = lang === 'he' ? 'invite-he.png' : 'invite.png';
+      if (img) img.src = lang === 'he' ? 'invite-he.png' : 'invite.jpg';
 
       // Update all translatable text nodes
       document.querySelectorAll('[data-i18n]').forEach(el => {
