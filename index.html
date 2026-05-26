@@ -71,17 +71,26 @@
     .lang-btn {
       background: none;
       border: 2px solid transparent;
-      border-radius: 0.35rem;
-      padding: 0.15rem 0.3rem;
-      font-size: 1.35rem;
-      line-height: 1;
+      border-radius: 0.25rem;
+      padding: 0;
       cursor: pointer;
-      opacity: 0.45;
-      transition: opacity 0.15s, border-color 0.15s;
+      opacity: 0.4;
+      transition: opacity 0.15s, border-color 0.15s, box-shadow 0.15s;
+      display: flex;
+      align-items: center;
+      line-height: 0;
+    }
+    .lang-btn img {
+      width: 28px;
+      height: 20px;
+      border-radius: 0.15rem;
+      display: block;
+      object-fit: cover;
     }
     .lang-btn.active {
       opacity: 1;
       border-color: var(--brown);
+      box-shadow: 0 0 0 1px var(--brown);
     }
     .lang-btn:hover:not(.active) {
       opacity: 0.75;
@@ -592,8 +601,12 @@
       <a href="#gifts" data-i18n="navGifts">Gifts</a>
     </div>
     <div class="lang-toggle">
-      <button class="lang-btn active" data-lang="en" onclick="setLang('en')" title="English">🇺🇸</button>
-      <button class="lang-btn" data-lang="he" onclick="setLang('he')" title="עברית">🇮🇱</button>
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')" title="English">
+        <img src="https://flagcdn.com/w40/gb.png" alt="English" />
+      </button>
+      <button class="lang-btn" data-lang="he" onclick="setLang('he')" title="עברית">
+        <img src="https://flagcdn.com/w40/il.png" alt="עברית" />
+      </button>
     </div>
   </nav>
 
