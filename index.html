@@ -558,6 +558,7 @@
 
     /* Bank details */
     .bank-rows { display: flex; flex-direction: column; gap: 0; }
+    .bank-rows.hidden { display: none; }
     .bank-row {
       display: flex;
       justify-content: space-between;
@@ -568,6 +569,32 @@
     .bank-row:last-child { border-bottom: none; }
     .bank-row .bk-label { color: var(--muted); font-weight: 400; }
     .bank-row .bk-val   { color: var(--brown); font-weight: 700; }
+
+    /* Bank country toggle */
+    .bank-toggle {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .bank-tab {
+      background: none;
+      border: 2px solid transparent;
+      border-radius: 0.25rem;
+      padding: 0;
+      cursor: pointer;
+      opacity: 0.35;
+      transition: opacity 0.15s, border-color 0.15s;
+      line-height: 0;
+    }
+    .bank-tab img {
+      width: 28px;
+      height: 20px;
+      border-radius: 0.15rem;
+      display: block;
+      object-fit: cover;
+    }
+    .bank-tab.active { opacity: 1; border-color: var(--brown); }
+    .bank-tab:hover:not(.active) { opacity: 0.65; }
 
     /* ── Footer ── */
     footer {
@@ -828,7 +855,18 @@
           <div class="r-icon">🏦</div>
           <h3 data-i18n="bankTitle">Bank Transfer</h3>
           <p data-i18n="bankDesc">Prefer a bank transfer? You're welcome to use these details.</p>
-          <div class="bank-rows">
+
+          <div class="bank-toggle">
+            <button class="bank-tab active" data-bank="il" onclick="switchBank('il')" title="Israel">
+              <img src="https://flagcdn.com/w40/il.png" alt="Israel" />
+            </button>
+            <button class="bank-tab" data-bank="uk" onclick="switchBank('uk')" title="UK">
+              <img src="https://flagcdn.com/w40/gb.png" alt="UK" />
+            </button>
+          </div>
+
+          <!-- Israeli account -->
+          <div class="bank-rows" id="bank-il">
             <div class="bank-row">
               <span class="bk-label" data-i18n="bankNameLabel">Account Name</span>
               <span class="bk-val">שירה ווליק</span>
@@ -844,6 +882,22 @@
             <div class="bank-row">
               <span class="bk-label" data-i18n="bankAccountLabel">Account No.</span>
               <span class="bk-val">202409</span>
+            </div>
+          </div>
+
+          <!-- UK account -->
+          <div class="bank-rows hidden" id="bank-uk">
+            <div class="bank-row">
+              <span class="bk-label" data-i18n="bankNameLabel">Account Name</span>
+              <span class="bk-val">Shira Annie Wulwick</span>
+            </div>
+            <div class="bank-row">
+              <span class="bk-label">Sort Code</span>
+              <span class="bk-val">09-01-28</span>
+            </div>
+            <div class="bank-row">
+              <span class="bk-label" data-i18n="bankAccountLabel">Account No.</span>
+              <span class="bk-val">73215146</span>
             </div>
           </div>
         </div>
@@ -1120,6 +1174,17 @@
         showSuccess();
       });
     })();
+  </script>
+
+  <!-- BANK TOGGLE -->
+  <script>
+    function switchBank(country) {
+      document.getElementById('bank-il').classList.toggle('hidden', country !== 'il');
+      document.getElementById('bank-uk').classList.toggle('hidden', country !== 'uk');
+      document.querySelectorAll('.bank-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.bank === country);
+      });
+    }
   </script>
 
   <!-- COUNTDOWN -->
