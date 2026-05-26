@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,6 +37,7 @@
       z-index: 100;
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 2.5rem;
       padding: 1rem 2rem;
       background: rgba(247,241,232,0.92);
@@ -54,6 +55,39 @@
       transition: color 0.2s;
     }
     nav a:hover { color: var(--terra); }
+
+    /* Language toggle */
+    .lang-toggle {
+      position: absolute;
+      right: 1.5rem;
+      display: flex;
+      gap: 0.3rem;
+    }
+    [dir="rtl"] .lang-toggle {
+      right: auto;
+      left: 1.5rem;
+    }
+    .lang-btn {
+      background: none;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 0.3rem;
+      padding: 0.2rem 0.55rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .lang-btn.active {
+      background: var(--brown);
+      border-color: var(--brown);
+      color: white;
+    }
+    .lang-btn:hover:not(.active) {
+      border-color: var(--brown);
+      color: var(--brown);
+    }
 
     /* ── Divider leaf ── */
     .leaf-divider {
@@ -231,6 +265,8 @@
       color: var(--sage-dark);
       margin-bottom: 0.6rem;
     }
+    [dir="rtl"] .section-eyebrow { letter-spacing: 0.05em; }
+
     h2.section-title {
       font-family: 'Playfair Display', serif;
       font-size: clamp(2rem, 5vw, 2.8rem);
@@ -312,6 +348,17 @@
       color: var(--sage-dark);
     }
     .form-group label .req { color: var(--terra); margin-left: 2px; }
+    [dir="rtl"] .form-group label .req { margin-left: 0; margin-right: 2px; }
+
+    /* Side-by-side name row */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 480px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
 
     .form-group input[type="text"],
     .form-group textarea {
@@ -445,8 +492,8 @@
       .rsvp-wrap { padding: 1.5rem 1.2rem; }
     }
 
-    /* ── Registry ── */
-    #registry { background: #f0e9db; }
+    /* ── Gifts ── */
+    #gifts { background: #f0e9db; }
 
     .registry-grid {
       display: grid;
@@ -490,6 +537,7 @@
       transition: background 0.15s, transform 0.15s;
     }
     .bit-person:hover { background: var(--cream-dark); transform: translateX(3px); }
+    [dir="rtl"] .bit-person:hover { transform: translateX(-3px); }
     .bit-avatar {
       width: 34px; height: 34px;
       border-radius: 50%;
@@ -499,8 +547,6 @@
       flex-shrink: 0;
       color: white;
     }
-    .av-shira  { background: var(--terra); }
-    .av-yehuda { background: var(--sage-dark); }
 
     /* Bank details */
     .bank-rows { display: flex; flex-direction: column; gap: 0; }
@@ -542,9 +588,13 @@
 
   <!-- NAV -->
   <nav>
-    <a href="#details">The Day</a>
-    <a href="#rsvp">RSVP</a>
-    <a href="#registry">Registry</a>
+    <a href="#details" data-i18n="navDay">The Day</a>
+    <a href="#rsvp" data-i18n="navRsvp">RSVP</a>
+    <a href="#gifts" data-i18n="navGifts">Gifts</a>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="he" onclick="setLang('he')">עב</button>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -553,25 +603,25 @@
 
       <p class="bsd">בס״ד</p>
 
-      <!-- Invitation image — save your invite as "invite.jpg" in this folder -->
+      <!-- Invitation image -->
       <div class="hero-invite-wrap">
-        <img src="invite.png" alt="Shira & Yehuda Wedding Invitation"
-             onerror="this.parentElement.innerHTML='<div class=\'invite-placeholder\'><div class=\'placeholder-icon\'>🌿</div><p>Save your invitation image as<br><strong>invite.jpg</strong><br>in the Wedding Site folder</p></div>'" />
+        <img id="invite-img" src="invite.png" alt="Shira & Yehuda Wedding Invitation"
+             onerror="this.parentElement.innerHTML='<div class=\'invite-placeholder\'><div class=\'placeholder-icon\'>🌿</div><p>Save your invitation image as<br><strong>invite.png</strong><br>in the Wedding Site folder</p></div>'" />
       </div>
 
       <div class="hero-names">Shira <span class="amp">&</span> Yehuda</div>
-      <div class="hero-date-line">30 · June · 2026</div>
+      <div class="hero-date-line" data-i18n="dateLine">30 · June · 2026</div>
 
       <div id="countdown">
-        <div class="count-box"><div class="num" id="cd-days">--</div><div class="lbl">Days</div></div>
-        <div class="count-box"><div class="num" id="cd-hours">--</div><div class="lbl">Hours</div></div>
-        <div class="count-box"><div class="num" id="cd-mins">--</div><div class="lbl">Mins</div></div>
-        <div class="count-box"><div class="num" id="cd-secs">--</div><div class="lbl">Secs</div></div>
+        <div class="count-box"><div class="num" id="cd-days">--</div><div class="lbl" data-i18n="days">Days</div></div>
+        <div class="count-box"><div class="num" id="cd-hours">--</div><div class="lbl" data-i18n="hours">Hours</div></div>
+        <div class="count-box"><div class="num" id="cd-mins">--</div><div class="lbl" data-i18n="mins">Mins</div></div>
+        <div class="count-box"><div class="num" id="cd-secs">--</div><div class="lbl" data-i18n="secs">Secs</div></div>
       </div>
 
       <div class="hero-btns">
-        <a href="#rsvp"                         class="btn btn-terra">RSVP</a>
-        <a href="https://shorturl.at/W5m4A" target="_blank" rel="noopener" class="btn btn-outline">📍 Directions</a>
+        <a href="#rsvp" class="btn btn-terra" data-i18n="heroRsvp">RSVP</a>
+        <a href="https://shorturl.at/W5m4A" target="_blank" rel="noopener" class="btn btn-outline" data-i18n="heroDirections">📍 Directions</a>
       </div>
     </div>
   </section>
@@ -579,40 +629,40 @@
   <!-- DETAILS -->
   <section id="details">
     <div class="section-inner">
-      <div class="section-eyebrow">The Wedding Day</div>
-      <h2 class="section-title">Event Details</h2>
+      <div class="section-eyebrow" data-i18n="detailsEyebrow">The Wedding Day</div>
+      <h2 class="section-title" data-i18n="detailsTitle">Event Details</h2>
       <div class="leaf-divider">✦ ❧ ✦</div>
 
       <div class="details-grid">
         <div class="detail-card">
           <div class="d-icon">🥂</div>
-          <div class="d-label">Reception</div>
+          <div class="d-label" data-i18n="receptionLabel">Reception</div>
           <div class="d-val">18:00</div>
-          <div class="d-sub">Doors open</div>
+          <div class="d-sub" data-i18n="receptionSub">Doors open</div>
         </div>
         <div class="detail-card">
           <div class="d-icon">💒</div>
-          <div class="d-label">Ceremony</div>
+          <div class="d-label" data-i18n="ceremonyLabel">Ceremony</div>
           <div class="d-val">19:00</div>
-          <div class="d-sub">Chupa & Kiddushin</div>
+          <div class="d-sub" data-i18n="ceremonySub">Chupa & Kiddushin</div>
         </div>
         <div class="detail-card">
           <div class="d-icon">🌿</div>
-          <div class="d-label">Venue</div>
+          <div class="d-label" data-i18n="venueLabel">Venue</div>
           <div class="d-val">חוות עמק איילון</div>
-          <div class="d-sub">Mevo Horon</div>
+          <div class="d-sub" data-i18n="venueSub">Mevo Horon</div>
         </div>
         <div class="detail-card">
           <div class="d-icon">🚌</div>
-          <div class="d-label">Shuttle</div>
-          <div class="d-val">Haifa & Jerusalem</div>
-          <div class="d-sub">TBD — let us know if you'd need one</div>
+          <div class="d-label" data-i18n="shuttleLabel">Shuttle</div>
+          <div class="d-val" data-i18n="shuttleVal">Haifa & Jerusalem</div>
+          <div class="d-sub" data-i18n="shuttleSub">TBD — let us know if you'd need one</div>
         </div>
       </div>
 
       <div class="detail-links">
-        <a href="https://shorturl.at/W5m4A" target="_blank" rel="noopener" class="btn btn-terra">📍 Directions</a>
-        <a href="https://chat.whatsapp.com/JSzh8NW2WeYEU41byprHVs?s=cl&p=a&mlu=4" target="_blank" rel="noopener" class="btn btn-sage">🚗 Ride-Share</a>
+        <a href="https://shorturl.at/W5m4A" target="_blank" rel="noopener" class="btn btn-terra" data-i18n="directionsBtn">📍 Directions</a>
+        <a href="https://chat.whatsapp.com/JSzh8NW2WeYEU41byprHVs?s=cl&p=a&mlu=4" target="_blank" rel="noopener" class="btn btn-sage" data-i18n="rideshareBtn">🚗 Ride-Share</a>
       </div>
     </div>
   </section>
@@ -620,9 +670,9 @@
   <!-- RSVP -->
   <section id="rsvp">
     <div class="section-inner">
-      <div class="section-eyebrow">Join Us</div>
-      <h2 class="section-title">RSVP</h2>
-      <p class="section-sub">
+      <div class="section-eyebrow" data-i18n="rsvpEyebrow">Join Us</div>
+      <h2 class="section-title" data-i18n="rsvpTitle">RSVP</h2>
+      <p class="section-sub" data-i18n="rsvpSub">
         We can't wait to celebrate with you. Please fill out the form below so we know you're coming — it only takes a minute. 🌾
       </p>
       <div class="rsvp-wrap">
@@ -642,71 +692,87 @@
           method="POST"
         >
 
-          <!-- Name -->
-          <div class="form-group">
-            <label for="rsvp-name">Your name <span class="req">*</span></label>
-            <input type="text" id="rsvp-name" name="name" placeholder="First & last name" required>
+          <!-- Name (side by side) -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="rsvp-firstname">
+                <span data-i18n="firstNameLabel">First name</span> <span class="req">*</span>
+              </label>
+              <input type="text" id="rsvp-firstname" name="firstname" data-i18n-ph="firstNamePh" placeholder="First name" required>
+            </div>
+            <div class="form-group">
+              <label for="rsvp-lastname">
+                <span data-i18n="lastNameLabel">Last name</span> <span class="req">*</span>
+              </label>
+              <input type="text" id="rsvp-lastname" name="lastname" data-i18n-ph="lastNamePh" placeholder="Last name" required>
+            </div>
           </div>
 
           <!-- Attendance -->
           <div class="form-group">
-            <label>Can you attend? <span class="req">*</span></label>
+            <label>
+              <span data-i18n="attendLabel">Can you attend?</span> <span class="req">*</span>
+            </label>
             <div class="radio-group" id="attendance-group">
               <label class="radio-option" data-value="yes">
-                <input type="radio" name="attending" value="Yes,  I'll be there" required>
+                <input type="radio" name="attending" value="Yes, I'll be there!" required>
                 <span class="radio-dot"></span>
-                <span class="radio-label">Yes, I'll be there!</span>
+                <span class="radio-label" data-i18n="attendYes">Yes, I'll be there!</span>
               </label>
               <label class="radio-option" data-value="no">
                 <input type="radio" name="attending" value="Sorry, can't make it">
                 <span class="radio-dot"></span>
-                <span class="radio-label">Sorry, can't make it</span>
-              </label>
-              <label class="radio-option" data-value="maybe">
-                <input type="radio" name="attending" value="I can't confirm yet, but will as soon as I can!">
-                <span class="radio-dot"></span>
-                <span class="radio-label">Can't confirm yet — I'll let you know soon</span>
+                <span class="radio-label" data-i18n="attendNo">Sorry, can't make it</span>
               </label>
             </div>
           </div>
 
-          <!-- Conditional fields (hidden until "yes" or "maybe") -->
+          <!-- Conditional fields (hidden until "yes") -->
           <div class="rsvp-conditional hidden" id="rsvp-conditional">
 
             <!-- Additional guests -->
             <div class="form-group">
-              <label for="rsvp-guests">Who else is coming with you?</label>
-              <input type="text" id="rsvp-guests" name="guests" placeholder="Names of any guests you're bringing">
+              <label for="rsvp-guests" data-i18n="guestsLabel">Who else is coming with you?</label>
+              <input type="text" id="rsvp-guests" name="guests" data-i18n-ph="guestsPh" placeholder="Names of any guests you're bringing">
             </div>
 
             <!-- Shuttle -->
             <div class="form-group">
-              <label>Would you need a shuttle? <span style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--muted); font-size:0.8rem;">(we're still figuring this out — just let us know if there's interest)</span></label>
+              <label>
+                <span data-i18n="shuttleFormLabel">Would you need a shuttle?</span>
+                <span style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--muted); font-size:0.8rem;"> <span data-i18n="shuttleNote">(we're still figuring this out — just let us know if there's interest)</span></span>
+              </label>
               <div class="checkbox-group">
                 <label class="check-option" data-name="shuttle_haifa">
                   <input type="checkbox" name="shuttle" value="Haifa">
                   <span class="check-box">✓</span>
-                  <span class="radio-label">🚌 From Haifa</span>
+                  <span class="radio-label" data-i18n="shuttleHaifa">🚌 From Haifa</span>
                 </label>
                 <label class="check-option" data-name="shuttle_jerusalem">
                   <input type="checkbox" name="shuttle" value="Jerusalem">
                   <span class="check-box">✓</span>
-                  <span class="radio-label">🚌 From Jerusalem</span>
+                  <span class="radio-label" data-i18n="shuttleJerusalem">🚌 From Jerusalem</span>
                 </label>
               </div>
             </div>
 
+            <!-- Dietary (inside conditional) -->
+            <div class="form-group">
+              <label for="rsvp-dietary" data-i18n="dietaryLabel">Dietary restrictions?</label>
+              <textarea id="rsvp-dietary" name="dietary" data-i18n-ph="dietaryPh" placeholder="Vegetarian, vegan, allergies…"></textarea>
+            </div>
+
           </div>
 
-          <!-- Dietary (always shown) -->
+          <!-- Message (always visible) -->
           <div class="form-group">
-            <label for="rsvp-dietary">Dietary restrictions or anything we should know?</label>
-            <textarea id="rsvp-dietary" name="dietary" placeholder="Vegetarian, vegan, allergies… or just a note for us 🌾"></textarea>
+            <label for="rsvp-message" data-i18n="messageLabel">Anything you want to share with us?</label>
+            <textarea id="rsvp-message" name="message" data-i18n-ph="messagePh" placeholder="A note, blessing, or anything on your mind 🌿"></textarea>
           </div>
 
           <!-- Submit -->
           <div class="form-submit">
-            <button type="submit" class="btn btn-terra">Send RSVP 🌿</button>
+            <button type="submit" class="btn btn-terra" data-i18n="submitBtn">Send RSVP 🌿</button>
           </div>
 
         </form>
@@ -714,12 +780,12 @@
     </div>
   </section>
 
-  <!-- REGISTRY -->
-  <section id="registry">
+  <!-- GIFTS -->
+  <section id="gifts">
     <div class="section-inner">
-      <div class="section-eyebrow">Gifts</div>
-      <h2 class="section-title">Registry</h2>
-      <p class="section-sub">
+      <div class="section-eyebrow" data-i18n="giftsEyebrow">Gifts</div>
+      <h2 class="section-title" data-i18n="giftsTitle">Gifts</h2>
+      <p class="section-sub" data-i18n="giftsSub">
         Your presence at our wedding is the greatest gift of all. If you'd like to contribute, here are a few simple ways. 🌻
       </p>
 
@@ -728,12 +794,12 @@
         <!-- Bit -->
         <div class="reg-card">
           <div class="r-icon">📱</div>
-          <h3>Send via Bit</h3>
-          <p>Quick and easy — send a gift directly from your phone with Bit.</p>
+          <h3 data-i18n="bitTitle">Send via Bit</h3>
+          <p data-i18n="bitDesc">Quick and easy — send a gift directly from your phone with Bit.</p>
           <div class="bit-list">
             <a href="https://bit.ly/dummy-shira" target="_blank" rel="noopener" class="bit-person">
-              <span class="bit-avatar av-shira" style="background: linear-gradient(135deg, var(--terra), var(--sage-dark));">S&Y</span>
-              Send to Shira & Yehuda
+              <span class="bit-avatar" style="background: linear-gradient(135deg, var(--terra), var(--sage-dark));">S&Y</span>
+              <span data-i18n="bitLink">Send to Shira & Yehuda</span>
             </a>
           </div>
         </div>
@@ -741,13 +807,25 @@
         <!-- Bank -->
         <div class="reg-card">
           <div class="r-icon">🏦</div>
-          <h3>Bank Transfer</h3>
-          <p>Prefer a bank transfer? You're welcome to use these details.</p>
+          <h3 data-i18n="bankTitle">Bank Transfer</h3>
+          <p data-i18n="bankDesc">Prefer a bank transfer? You're welcome to use these details.</p>
           <div class="bank-rows">
-            <div class="bank-row"><span class="bk-label">Account Name</span><span class="bk-val">Shira & Yehuda</span></div>
-            <div class="bank-row"><span class="bk-label">Bank</span><span class="bk-val">Bank Leumi (10)</span></div>
-            <div class="bank-row"><span class="bk-label">Branch</span><span class="bk-val">900</span></div>
-            <div class="bank-row"><span class="bk-label">Account No.</span><span class="bk-val">12345678</span></div>
+            <div class="bank-row">
+              <span class="bk-label" data-i18n="bankNameLabel">Account Name</span>
+              <span class="bk-val">Shira & Yehuda</span>
+            </div>
+            <div class="bank-row">
+              <span class="bk-label" data-i18n="bankBankLabel">Bank</span>
+              <span class="bk-val">Bank Leumi (10)</span>
+            </div>
+            <div class="bank-row">
+              <span class="bk-label" data-i18n="bankBranchLabel">Branch</span>
+              <span class="bk-val">900</span>
+            </div>
+            <div class="bank-row">
+              <span class="bk-label" data-i18n="bankAccountLabel">Account No.</span>
+              <span class="bk-val">12345678</span>
+            </div>
           </div>
         </div>
 
@@ -758,12 +836,186 @@
   <!-- FOOTER -->
   <footer>
     <div class="f-names">Shira & Yehuda</div>
-    <p>30 June 2026 · חוות עמק איילון, מבוא חורון</p>
+    <p data-i18n="footerDate">30 June 2026 · חוות עמק איילון, מבוא חורון</p>
     <p style="margin-top:0.8rem;">
-      Questions? <a href="mailto:yehudashani88@gmail.com">yehudashani88@gmail.com</a>
+      <span data-i18n="footerQuestions">Questions?</span> <a href="mailto:yehudashani88@gmail.com">yehudashani88@gmail.com</a>
     </p>
-    <p style="margin-top:1rem; font-size:0.8rem; opacity:0.5;">Made with love 🌿</p>
+    <p style="margin-top:1rem; font-size:0.8rem; opacity:0.5;" data-i18n="footerMade">Made with love 🌿</p>
   </footer>
+
+  <!-- TRANSLATIONS + LANGUAGE LOGIC -->
+  <script>
+    const t = {
+      en: {
+        navDay: 'The Day',
+        navRsvp: 'RSVP',
+        navGifts: 'Gifts',
+        dateLine: '30 · June · 2026',
+        heroRsvp: 'RSVP',
+        heroDirections: '📍 Directions',
+        days: 'Days',
+        hours: 'Hours',
+        mins: 'Mins',
+        secs: 'Secs',
+        detailsEyebrow: 'The Wedding Day',
+        detailsTitle: 'Event Details',
+        receptionLabel: 'Reception',
+        receptionSub: 'Doors open',
+        ceremonyLabel: 'Ceremony',
+        ceremonySub: 'Chupa & Kiddushin',
+        venueLabel: 'Venue',
+        venueSub: 'Mevo Horon',
+        shuttleLabel: 'Shuttle',
+        shuttleVal: 'Haifa & Jerusalem',
+        shuttleSub: "TBD — let us know if you'd need one",
+        directionsBtn: '📍 Directions',
+        rideshareBtn: '🚗 Ride-Share',
+        rsvpEyebrow: 'Join Us',
+        rsvpTitle: 'RSVP',
+        rsvpSub: "We can't wait to celebrate with you. Please fill out the form below so we know you're coming — it only takes a minute. 🌾",
+        firstNameLabel: 'First name',
+        firstNamePh: 'First name',
+        lastNameLabel: 'Last name',
+        lastNamePh: 'Last name',
+        attendLabel: 'Can you attend?',
+        attendYes: "Yes, I'll be there!",
+        attendNo: "Sorry, can't make it",
+        guestsLabel: 'Who else is coming with you?',
+        guestsPh: "Names of any guests you're bringing",
+        shuttleFormLabel: 'Would you need a shuttle?',
+        shuttleNote: "(we're still figuring this out — just let us know if there's interest)",
+        shuttleHaifa: '🚌 From Haifa',
+        shuttleJerusalem: '🚌 From Jerusalem',
+        dietaryLabel: 'Dietary restrictions?',
+        dietaryPh: 'Vegetarian, vegan, allergies…',
+        messageLabel: 'Anything you want to share with us?',
+        messagePh: 'A note, blessing, or anything on your mind 🌿',
+        submitBtn: 'Send RSVP 🌿',
+        giftsEyebrow: 'Gifts',
+        giftsTitle: 'Gifts',
+        giftsSub: "Your presence at our wedding is the greatest gift of all. If you'd like to contribute, here are a few simple ways. 🌻",
+        bitTitle: 'Send via Bit',
+        bitDesc: 'Quick and easy — send a gift directly from your phone with Bit.',
+        bitLink: 'Send to Shira & Yehuda',
+        bankTitle: 'Bank Transfer',
+        bankDesc: "Prefer a bank transfer? You're welcome to use these details.",
+        bankNameLabel: 'Account Name',
+        bankBankLabel: 'Bank',
+        bankBranchLabel: 'Branch',
+        bankAccountLabel: 'Account No.',
+        footerDate: '30 June 2026 · חוות עמק איילון, מבוא חורון',
+        footerQuestions: 'Questions?',
+        footerMade: 'Made with love 🌿',
+        successYesIcon: '🌿',
+        successYesTitle: "You're on the list!",
+        successYesBody: "We can't wait to celebrate with you.<br>See you on 30 June 2026! 🥂",
+        successNoIcon: '💛',
+        successNoTitle: "Thanks for letting us know",
+        successNoBody: "We'll miss you — but we really appreciate you taking the time to RSVP.",
+      },
+      he: {
+        navDay: 'היום',
+        navRsvp: 'אישור הגעה',
+        navGifts: 'מתנות',
+        dateLine: '30 · יוני · 2026',
+        heroRsvp: 'אישור הגעה',
+        heroDirections: '📍 הנחיות',
+        days: 'ימים',
+        hours: 'שעות',
+        mins: 'דקות',
+        secs: 'שניות',
+        detailsEyebrow: 'יום החתונה',
+        detailsTitle: 'פרטי האירוע',
+        receptionLabel: 'קבלת פנים',
+        receptionSub: 'פתיחת שערים',
+        ceremonyLabel: 'חופה',
+        ceremonySub: 'חופה וקידושין',
+        venueLabel: 'מיקום',
+        venueSub: 'מבוא חורון',
+        shuttleLabel: 'הסעות',
+        shuttleVal: 'חיפה וירושלים',
+        shuttleSub: 'עדיין לא סגור — ספרו לנו אם תצטרכו',
+        directionsBtn: '📍 הנחיות הגעה',
+        rideshareBtn: '🚗 טרמפים',
+        rsvpEyebrow: 'הצטרפו אלינו',
+        rsvpTitle: 'אישור הגעה',
+        rsvpSub: 'כל כך מתרגשים לחגוג אתכם! אנא מלאו את הטופס כדי שנדע שאתם באים 🌾',
+        firstNameLabel: 'שם פרטי',
+        firstNamePh: 'שם פרטי',
+        lastNameLabel: 'שם משפחה',
+        lastNamePh: 'שם משפחה',
+        attendLabel: 'האם תוכלו להגיע?',
+        attendYes: 'כן, אני מגיע/ה!',
+        attendNo: 'מצטער/ת, לא אוכל',
+        guestsLabel: 'מי עוד מגיע אתכם?',
+        guestsPh: 'שמות האורחים הנוספים',
+        shuttleFormLabel: 'תצטרכו הסעה?',
+        shuttleNote: '(עדיין לא סגור — ספרו לנו אם יש עניין)',
+        shuttleHaifa: '🚌 מחיפה',
+        shuttleJerusalem: '🚌 מירושלים',
+        dietaryLabel: 'הגבלות תזונתיות?',
+        dietaryPh: 'צמחוני, טבעוני, אלרגיות…',
+        messageLabel: 'משהו שרוצים לשתף איתנו?',
+        messagePh: 'הודעה, ברכה, כל דבר שבא לכם 🌿',
+        submitBtn: 'שליחה 🌿',
+        giftsEyebrow: 'מתנות',
+        giftsTitle: 'מתנות',
+        giftsSub: 'הנוכחות שלכם בחתונה היא המתנה הכי גדולה. אם רוצים לתרום, הנה כמה דרכים פשוטות 🌻',
+        bitTitle: 'שליחה דרך ביט',
+        bitDesc: 'קל ומהיר — שלחו מתנה ישירות מהטלפון.',
+        bitLink: 'שלחו לשירה ויהודה',
+        bankTitle: 'העברה בנקאית',
+        bankDesc: 'מעדיפים העברה בנקאית? הנה הפרטים.',
+        bankNameLabel: 'שם חשבון',
+        bankBankLabel: 'בנק',
+        bankBranchLabel: 'סניף',
+        bankAccountLabel: 'מספר חשבון',
+        footerDate: '30 יוני 2026 · חוות עמק איילון, מבוא חורון',
+        footerQuestions: 'שאלות?',
+        footerMade: 'נעשה באהבה 🌿',
+        successYesIcon: '🌿',
+        successYesTitle: 'אתם ברשימה!',
+        successYesBody: 'כל כך שמחים שתהיו שם.<br>נתראה ב-30 ביוני 2026! 🥂',
+        successNoIcon: '💛',
+        successNoTitle: 'תודה שעדכנתם אותנו',
+        successNoBody: 'נחסר לנו — אבל מעריכים מאוד שלקחתם את הזמן לענות.',
+      }
+    };
+
+    let currentLang = 'en';
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
+
+      // Swap invite image
+      const img = document.getElementById('invite-img');
+      if (img) img.src = lang === 'he' ? 'invite-he.png' : 'invite.png';
+
+      // Update all translatable text nodes
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (t[lang][key] != null) el.textContent = t[lang][key];
+      });
+
+      // Update all translatable placeholders
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.dataset.i18nPh;
+        if (t[lang][key] != null) el.placeholder = t[lang][key];
+      });
+
+      // Update active button state
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+
+      localStorage.setItem('wedding-lang', lang);
+    }
+
+    // Init on load
+    setLang(localStorage.getItem('wedding-lang') || 'en');
+  </script>
 
   <!-- RSVP FORM LOGIC -->
   <script>
@@ -773,7 +1025,7 @@
       const conditional = document.getElementById('rsvp-conditional');
       const radios      = document.querySelectorAll('#attendance-group .radio-option');
 
-      let selectedAttendance = 'yes';
+      let selectedAttendance = null;
 
       // Style custom radio buttons & show/hide conditional fields
       radios.forEach(opt => {
@@ -783,7 +1035,7 @@
           selectedAttendance = val;
           opt.classList.add(val === 'no' ? 'selected-no' : 'selected');
           opt.querySelector('input').checked = true;
-          conditional.classList.toggle('hidden', val === 'no');
+          conditional.classList.toggle('hidden', val !== 'yes');
         });
       });
 
@@ -796,17 +1048,25 @@
         });
       });
 
-      // Dynamic success messages based on attendance
+      // Dynamic success messages based on attendance + current language
       function showSuccess() {
-        const messages = {
-          yes:   { icon: '🌿', title: "You're on the list!", body: "We can't wait to celebrate with you.<br>See you on 30 June 2026! 🥂" },
-          no:    { icon: '💛', title: "Thanks for letting us know",  body: "We'll miss you — but we really appreciate you taking the time to RSVP." },
-          maybe: { icon: '🤍', title: "Got it!",                     body: "No worries — just let us know when you can. We hope to see you there!" },
-        };
-        const m = messages[selectedAttendance] || messages.yes;
-        document.getElementById('success-icon').textContent  = m.icon;
-        document.getElementById('success-title').textContent = m.title;
-        document.getElementById('success-body').innerHTML    = m.body;
+        const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
+        const tr = (typeof t !== 'undefined' && t[lang]) ? t[lang] : {};
+
+        let icon, title, body;
+        if (selectedAttendance === 'no') {
+          icon  = tr.successNoIcon  || '💛';
+          title = tr.successNoTitle || "Thanks for letting us know";
+          body  = tr.successNoBody  || "We'll miss you — but we really appreciate you taking the time to RSVP.";
+        } else {
+          icon  = tr.successYesIcon  || '🌿';
+          title = tr.successYesTitle || "You're on the list!";
+          body  = tr.successYesBody  || "We can't wait to celebrate with you.<br>See you on 30 June 2026! 🥂";
+        }
+
+        document.getElementById('success-icon').textContent  = icon;
+        document.getElementById('success-title').textContent = title;
+        document.getElementById('success-body').innerHTML    = body;
         form.style.display = 'none';
         success.classList.add('visible');
         success.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -815,15 +1075,26 @@
       // Submit via fetch (stays on page)
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        // Collect form data, joining multiple shuttle checkboxes into one value
         const raw = new FormData(form);
         const data = new URLSearchParams();
+
+        // Combine first + last name
+        const firstName = raw.get('firstname') || '';
+        const lastName  = raw.get('lastname')  || '';
+        data.append('name', `${firstName} ${lastName}`.trim());
+
+        // Collect remaining fields
         const shuttleVals = [];
         for (const [k, v] of raw.entries()) {
-          if (k === 'shuttle') { shuttleVals.push(v); }
-          else { data.append(k, v); }
+          if (k === 'firstname' || k === 'lastname') continue;
+          if (k === 'shuttle') { shuttleVals.push(v); continue; }
+          data.append(k, v);
         }
         if (shuttleVals.length) data.append('shuttle', shuttleVals.join(', '));
+
+        // Include language
+        data.append('lang', typeof currentLang !== 'undefined' ? currentLang : 'en');
+
         try {
           await fetch(form.action, { method: 'POST', body: data });
         } catch (_) { /* show success even on network hiccup */ }
