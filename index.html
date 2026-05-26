@@ -1113,8 +1113,6 @@
         }
         if (shuttleVals.length) data.append('shuttle', shuttleVals.join(', '));
 
-        // Include language
-        data.append('lang', typeof currentLang !== 'undefined' ? currentLang : 'en');
 
         try {
           await fetch(form.action, { method: 'POST', body: data });
