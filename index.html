@@ -570,6 +570,25 @@
     .bank-row .bk-label { color: var(--muted); font-weight: 400; }
     .bank-row .bk-val   { color: var(--brown); font-weight: 700; }
 
+    /* PayPal subtle link */
+    .paypal-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.15s;
+    }
+    .paypal-link:hover { opacity: 1; }
+    .paypal-icon {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+    }
+
     /* Bank country toggle */
     .bank-toggle {
       display: flex;
@@ -900,6 +919,12 @@
               <span class="bk-val">73215146</span>
             </div>
           </div>
+
+          <!-- PayPal -->
+          <a href="https://paypal.me/ShiraWulwick" target="_blank" rel="noopener" class="paypal-link">
+            <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" class="paypal-icon" />
+            <span data-i18n="paypalLink">Or send via PayPal</span>
+          </a>
         </div>
 
       </div>
@@ -973,6 +998,7 @@
         bankBankLabel: 'Bank',
         bankBranchLabel: 'Branch',
         bankAccountLabel: 'Account No.',
+        paypalLink: 'Or send via PayPal',
         footerDate: '30 June 2026 · חוות עמק איילון, מבוא חורון',
         footerQuestions: 'Questions?',
         footerMade: 'Made with love 🌿',
@@ -1041,6 +1067,7 @@
         bankBankLabel: 'בנק',
         bankBranchLabel: 'סניף',
         bankAccountLabel: 'מספר חשבון',
+        paypalLink: 'או שלחו דרך PayPal',
         footerDate: '30 יוני 2026 · חוות עמק איילון, מבוא חורון',
         footerQuestions: 'שאלות?',
         footerMade: 'נעשה באהבה 🌿',
